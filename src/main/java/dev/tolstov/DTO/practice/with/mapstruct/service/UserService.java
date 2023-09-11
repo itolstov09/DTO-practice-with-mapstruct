@@ -1,5 +1,8 @@
 package dev.tolstov.DTO.practice.with.mapstruct.service;
 
+import dev.tolstov.DTO.practice.with.mapstruct.DTO.UserModelCreateRequest;
+import dev.tolstov.DTO.practice.with.mapstruct.DTO.UserModelDTO;
+import dev.tolstov.DTO.practice.with.mapstruct.mappers.UserModelMapper;
 import dev.tolstov.DTO.practice.with.mapstruct.model.UserModel;
 import dev.tolstov.DTO.practice.with.mapstruct.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -7,26 +10,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final UserModelMapper mapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(
+            UserRepository userRepository,
+            UserModelMapper mapper
+    ) {
         this.userRepository = userRepository;
+        this.mapper = mapper;
     }
 
-    public List<UserModel> findAll() {
-        return userRepository.findAll();
-    }
-
-    public UserModel findByUUID(UUID uuid) {
+    public List<UserModelDTO> findAll() {
         return userRepository
-                .findById(uuid)
-                .orElseThrow(EntityNotFoundException::new);
+                .findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public UserModel save(UserModel userModel) {
-        return userRepository.save(userModel);
+    public UserModelDTO findByUUID(UUID uuid) {
+        return mapper.toDTO(
+                userRepository
+                        .findById(uuid)
+                        .orElseThrow(EntityNotFoundException::new)
+        );
+    }
+
+    public UserModelDTO save(UserModelCreateRequest createRequest) {
+        UserModel userModel = mapper.registrationRequestToUserModel(createRequest);
+        UserModel saved = userRepository.save(userModel);
+        return mapper.toDTO(saved);
     }
 }
