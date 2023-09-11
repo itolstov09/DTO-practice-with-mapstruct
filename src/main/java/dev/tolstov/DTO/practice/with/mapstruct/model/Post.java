@@ -25,6 +25,10 @@ public class Post {
         this.text = text;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public UserModel getAuthor() {
         return author;
     }
