@@ -56,12 +56,11 @@ public class UserController {
     }
 
 
-    // TODO Реализовать позднее, когда будет реализован маппинг
-//    @GetMapping("{user_id}/posts/{post_id}")
-//    public Post getPostByUserIDAndPostID(
-//            @PathVariable(name = "user_id") UUID userUUID,
-//            @PathVariable(name = "post_id") UUID postUUID
-//    ) {
-//
-//    }
+    @GetMapping("{user_id}/posts/{post_id}")
+    public PostDTO getPostByUserIDAndPostID(
+            @PathVariable(name = "user_id") UUID userUUID,
+            @PathVariable(name = "post_id") UUID postUUID
+    ) {
+        return postService.getPostByUserIDAndPostID(userUUID, postUUID);
+    }
 }
