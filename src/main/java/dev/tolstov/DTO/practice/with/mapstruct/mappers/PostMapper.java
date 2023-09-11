@@ -6,6 +6,8 @@ import dev.tolstov.DTO.practice.with.mapstruct.model.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
@@ -14,4 +16,6 @@ public interface PostMapper {
 
     @Mapping(target = "author", ignore = true)
     Post CreateRequestToPost(PostCreateRequest createRequest);
+
+    List<PostDTO> listToDTO(List<Post> posts);
 }

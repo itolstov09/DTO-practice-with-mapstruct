@@ -26,11 +26,7 @@ public class UserService {
     }
 
     public List<UserModelDTO> findAll() {
-        return userRepository
-                .findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        return mapper.listToDTO(userRepository.findAll());
     }
 
     public UserModelDTO findByUUID(UUID uuid) {

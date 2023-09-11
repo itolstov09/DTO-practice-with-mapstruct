@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -32,11 +31,7 @@ public class PostService {
     }
 
     public List<PostDTO> findAllByAuthorId(UUID authorUUID) {
-        return postRepository
-                .findAllByAuthor_uuid(authorUUID)
-                .stream()
-                .map(postMapper::toDTO)
-                .collect(Collectors.toList());
+        return postMapper.listToDTO(postRepository.findAllByAuthor_uuid(authorUUID));
     }
 
     public PostDTO save(UUID authorUUID, PostCreateRequest createRequest) {
